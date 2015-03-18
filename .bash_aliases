@@ -89,7 +89,7 @@ svndi() {
 	svn diff $* -x "-p -u" | colordiff
 }
 
-alias gitst='git status'
+alias gitst='git status ; git log @{u}.. --pretty=oneline'
 alias gitdi='git diff'
 alias gitch='git checkout'
 
