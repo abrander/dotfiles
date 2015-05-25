@@ -151,6 +151,8 @@ __vcsstatus() {
 
 PS1='($?) ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\] [\[\033[36m\]$(__vcsstatus)\[\033[0m\]] \$ '
 
+export GOPATH=$HOME
+
 alias less="less -R"
 alias cgrep="grep --include \*.c -r --color=always -A 6 -B 6 -n"
 alias hgrep="grep --include \*.h -r --color=always -A 6 -B 6 -n"
