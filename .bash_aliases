@@ -160,3 +160,6 @@ alias pgrep='grep --include \*.php -r --color=always -A 2 -B 2 -n'
 alias gogrep='grep --include \*.go -r --color=always -A 2 -B 2 -n'
 alias jsgrep='grep --include \*.js -r --color=always -A 2 -B 2 -n'
 alias htgrep='grep --include \*.html -r --color=always -A 2 -B 2 -n'
+
+# For Docker
+alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
