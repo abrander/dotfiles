@@ -1,108 +1,8 @@
 #!/bin/bash
 
-svnup() {
-	php -- $1 << 'EOF'
-<?php
-
-$cmd = "svn up --non-interactive";
-
-if ($_SERVER['argc'] > 1)
-    $cmd .= " -r {$_SERVER['argv'][1]}";
-
-echo "Executing '{$cmd}'\n";
-
-$svn_res = popen($cmd, 'r');
-
-while ($line = fgets($svn_res))
-{
-	$line = trim($line);
-	$pre = substr($line, 0, 4);
-	switch ($pre)
-	{
-		case 'A   ':
-			echo("\033[32m");
-			break;
-		case 'D   ':
-			echo("\033[33m");
-			break;
-		case 'U   ':
-			echo("\033[0m");
-			break;
-		case 'C   ':
-			echo("\033[41m");
-			break;
-		case 'G   ':
-			echo("\033[35m");
-			break;
-	}
-
-	echo("{$line}\033[0m\n");
-}
-
-pclose($svn_res);
-?>
-EOF
-}
-
-svnst() {
-	php $* << 'EOF'
-<?php
-
-$cmd = "svn st --non-interactive | sort";
-
-if ($_SERVER['argc'] > 1)
-    $cmd .= " {$_SERVER['argv'][1]}";
-
-echo "Executing '{$cmd}'\n";
-
-$svn_res = popen($cmd, 'r');
-
-while($line = fgets($svn_res))
-{
-	$line = trim($line);
-	$pre = substr($line, 0, 3);
-	switch ($pre)
-	{
-		case 'A  ':
-			echo("\033[32m");
-			break;
-		case 'M  ':
-			echo("\033[33m");
-			break;
-		case 'D  ':
-			echo("\033[31m");
-			break;
-		default:
-			echo("\033[0m");
-			break;
-	}
-
-	echo("{$line}\033[0m\n");
-}
-
-pclose($svn_res);
-?>
-EOF
-}
-
-svndi() {
-	svn diff $* -x "-p -u" | colordiff
-}
-
 alias gitst='git status ; git log @{u}.. --pretty=oneline'
 alias gitdi='git diff'
 alias gitch='git checkout'
-
-__svnstatus() {
-	ver="$(svnversion)"
-
-	# Early svn use "exported" for non-svn directories, later use "Unversioned directory"
-	if [ ! "$ver" = "exported" ] && [ ! "$ver" = "Unversioned directory" ]; then
-		echo "svn ${ver}"
-	else
-		echo ""
-	fi
-}
 
 __gitstatus() {
 	branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
@@ -139,17 +39,7 @@ __gitstatus() {
 	echo $ver
 }
 
-__vcsstatus() {
-	VERSION=$(__svnstatus)
-
-	if [ "${VERSION}" = "" ]; then
-		VERSION=$(__gitstatus)
-	fi
-
-	echo ${VERSION}
-}
-
-PS1='($?) ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\] [\[\033[36m\]$(__vcsstatus)\[\033[0m\]] \$ '
+PS1='($?) ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\] [\[\033[36m\]$(__gitstatus)\[\033[0m\]] \$ '
 
 export GOPATH=$HOME
 
