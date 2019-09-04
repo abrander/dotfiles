@@ -70,7 +70,29 @@ __timer_elapsed() {
 }
 
 PS0='$(__timer_start)'
-PS1='($?) $(__timer_elapsed) ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\] [\[\033[36m\]$(__gitstatus)\[\033[0m\]]\$ '
+
+# initialize the first command execution to avoid starting with a highlighted exitcode.
+__commands[1]=
+
+__build_ps1() {
+	local EXITCODE="$?"
+
+	# Colors
+	local RESET='\[\033[00m\]'
+	local BLUE='\[\033[01;34m\]'
+	local GREEN='\[\033[01;32m\]'
+	local CYAN='\[\033[36m\]'
+	local ERROR='\[\033[1;37;41m\]'
+	local BLACK='\[\033[0;30;30m\]'
+
+	if (($EXITCODE != 0)); then
+		local EXITCOLOR="${ERROR}"
+	fi
+
+	PS1="\# (${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) ${BLUE}\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ "
+}
+
+PROMPT_COMMAND='__build_ps1'
 
 export GOPATH=$HOME
 
