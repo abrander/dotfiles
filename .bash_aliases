@@ -39,7 +39,38 @@ __gitstatus() {
 	echo $ver
 }
 
-PS1='($?) ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\] [\[\033[36m\]$(__gitstatus)\[\033[0m\]] \$ '
+TIMINGPATH=/dev/shm/start.$BASHPID
+
+__now() {
+	# Milliseconds since Epoch
+	echo $(($(date +%s%N)/1000000))
+}
+
+__timer_start() {
+	__now > $TIMINGPATH
+}
+
+__timer_elapsed() {
+	local NOW=$(__now)
+	local START=$(cat $TIMINGPATH 2>/dev/null)
+
+	rm -f $TIMINGPATH
+
+	if [ ! -z $START ]; then
+		local ELAPSED=$(($NOW - $START))
+
+		if (($ELAPSED < 60000)); then
+			printf "[%5dms]" $ELAPSED
+		else
+			printf "[%6ds]" $(($ELAPSED/1000))
+		fi
+	else
+		echo "[       ]"
+	fi
+}
+
+PS0='$(__timer_start)'
+PS1='($?) $(__timer_elapsed) ${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\h\[\033[00m\]:\[\033[01;32m\]\w\[\033[00m\] [\[\033[36m\]$(__gitstatus)\[\033[0m\]]\$ '
 
 export GOPATH=$HOME
 
