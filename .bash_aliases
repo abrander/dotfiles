@@ -69,7 +69,19 @@ __timer_elapsed() {
 	fi
 }
 
-PS0='$(__timer_start)'
+# Cache the hostname. It rarely changes.
+__HOSTNAME=$(hostname -f)
+
+__set_title() {
+	# BASH_COMMAND is not reliable here. We must parse history.
+	local CMD=$(history 1 | cut -c8-)
+
+	local TITLE="${__HOSTNAME}: ${CMD} ${__CWD}"
+
+	echo -en "\033]0;${TITLE}\007"
+}
+
+PS0='$(__timer_start)$(typeset __CWD="\w";__set_title)'
 
 # initialize the first command execution to avoid starting with a highlighted exitcode.
 __commands[1]=
@@ -85,11 +97,13 @@ __build_ps1() {
 	local ERROR='\[\033[1;37;41m\]'
 	local BLACK='\[\033[0;30;30m\]'
 
+	local TITLE='\[\033]0;\h: \w\007\]'
+
 	if (($EXITCODE != 0)); then
 		local EXITCOLOR="${ERROR}"
 	fi
 
-	PS1="(${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) ${BLUE}\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ "
+	PS1="${TITLE}(${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) ${BLUE}\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ "
 }
 
 PROMPT_COMMAND='__build_ps1'
