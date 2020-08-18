@@ -1,0 +1,12 @@
+[global_config]
+  focus = system
+  title_hide_sizetext = True
+  inactive_color_offset = 0.7
+[profiles]
+  [[default]]
+    visible_bell = True
+    cursor_color = "#e9b96e"
+    cursor_color_fg = False
+    font = DejaVu Sans Mono 14
+    scrollback_lines = 5000
+    use_system_font = False
