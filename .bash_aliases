@@ -111,6 +111,8 @@ PROMPT_COMMAND='__build_ps1'
 export GOPATH=$HOME
 export PATH=$PATH:$GOPATH/bin
 
+alias ..="cd .."
+alias -- -="cd -"
 alias less="less -R"
 alias cgrep="grep --include \*.c -r --color=always -A 6 -B 6 -n"
 alias hgrep="grep --include \*.h -r --color=always -A 6 -B 6 -n"
