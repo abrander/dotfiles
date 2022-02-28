@@ -144,16 +144,18 @@ EXEC 1;92
 LINK 96
 ORPHAN 41;30
 
+.sh 92
+
 .exe 1;4;92
 .so 2;92
 .jar 1;92
-
 .pem 1;40;33
 .der 1;40;33
 .key 1;40;33
 
 *Makefile 1;33
 *Dockerfile 1;33
+*Procfile 1;33
 *go.mod 1;33
 *.gitignore 33
 .golangci.yaml 1;33
@@ -162,15 +164,31 @@ ORPHAN 41;30
 
 *go.sum 33
 *LICENSE 33
+*COPYING 33
 
 .i 1;32
 .go 1;32
 .c 1;32
 .java 1;32
 .js 1;32
+.py 1;32
 
 .h 32
+
+*_test.go 32
+
+.html 32
 
 .bc 2;32
 .o 2;32
 .class 2;32
+
+.icc 36
+
+.json 1;95
+.yaml 1;95
+.yml 1;95
+.ini 1;95
+.csv 1;95
+
+.pcap 1;96
