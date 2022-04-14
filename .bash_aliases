@@ -5,6 +5,20 @@ alias gitdi='git diff'
 alias gitch='git checkout'
 
 __gitstatus() {
+	# Look for a .mute file. Useful for slow
+	# filesystems or slow servers.
+	local MUTED=0
+	x=`pwd`
+	while [ "$x" != "/" ] ; do
+		test -f "$x/.gitmute" && MUTED=1
+		x=`dirname "$x"`
+	done
+
+	if [[ "$MUTED" == "1" ]]; then
+		echo MUTED
+		return 0
+	fi
+
 	branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
 
 	# If git rev-parse doesn't return 0, we're not in a git controlled directory
