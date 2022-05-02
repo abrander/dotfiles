@@ -86,6 +86,8 @@ __timer_elapsed() {
 # Cache the hostname. It rarely changes.
 __HOSTNAME=$(hostname -f)
 
+__COLOR=$(cat ~/.color 2>/dev/null || echo -en "\033[01;36m")
+
 __set_title() {
 	# BASH_COMMAND is not reliable here. We must parse history.
 	local CMD=$(history 1 | cut -c8-)
@@ -95,7 +97,11 @@ __set_title() {
 	echo -en "\033]0;${TITLE}\007"
 }
 
-PS0='$(__timer_start)$(typeset __CWD="\w";__set_title)'
+__reset_colors() {
+	echo -en "\033[0m"
+}
+
+PS0='$(__timer_start)$(__reset_colors)$(typeset __CWD="\w";__set_title)'
 
 # initialize the first command execution to avoid starting with a highlighted exitcode.
 __commands[1]=
@@ -105,7 +111,6 @@ __build_ps1() {
 
 	# Colors
 	local RESET='\[\033[00m\]'
-	local BLUE='\[\033[01;34m\]'
 	local GREEN='\[\033[01;32m\]'
 	local CYAN='\[\033[36m\]'
 	local ERROR='\[\033[1;37;41m\]'
@@ -117,7 +122,7 @@ __build_ps1() {
 		local EXITCOLOR="${ERROR}"
 	fi
 
-	PS1="${TITLE}(${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) ${BLUE}\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ "
+	PS1="${TITLE}(${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) \[${__COLOR}\]\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ \[${__COLOR}\]"
 }
 
 PROMPT_COMMAND='__build_ps1'
