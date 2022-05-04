@@ -122,7 +122,7 @@ __build_ps1() {
 		local EXITCOLOR="${ERROR}"
 	fi
 
-	PS1="${TITLE}(${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) \[${__COLOR}\]\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ \[${__COLOR}\]"
+	PS1="${TITLE}${RESET}(${EXITCOLOR}\${__commands[\#]+${BLACK}}${EXITCODE}\${__commands[\#]=}${RESET}) $(__timer_elapsed) \[${__COLOR}\]\h${RESET}:${GREEN}\w${RESET} [${CYAN}$(__gitstatus)${RESET}]\$ \[${__COLOR}\]"
 }
 
 PROMPT_COMMAND='__build_ps1'
