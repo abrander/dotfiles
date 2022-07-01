@@ -8,3 +8,4 @@ set showmatch
 set nobackup
 set ruler
 set nocp
+set number
