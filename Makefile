@@ -1,4 +1,4 @@
-TARGETS := .bash_aliases .dircolors .vimrc
+TARGETS := .bash_aliases .dircolors .vimrc .config/terminator/config
 
 all: ${TARGETS}
 
@@ -15,4 +15,8 @@ endef
 	$(LINKIT)
 
 .vimrc:
+	$(LINKIT)
+
+.config/terminator/config:
+	mkdir -p ~/.config/terminator
 	$(LINKIT)
