@@ -4,6 +4,8 @@ alias gitst='git status ; git log @{u}.. --pretty=oneline'
 alias gitdi='git diff'
 alias gitch='git checkout'
 
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+
 __gitstatus() {
 	# Look for a .mute file. Useful for slow
 	# filesystems or slow servers.
