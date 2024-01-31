@@ -130,7 +130,7 @@ __build_ps1() {
 PROMPT_COMMAND='__build_ps1'
 
 export GOPATH=$HOME
-export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOPATH/bin:$HOME/.local/bin
 
 alias ..="cd .."
 alias -- -="cd -"
